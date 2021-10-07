@@ -91,8 +91,8 @@ public:
 		  	q=iterator->RChild;
 		  
 		else {
-		  throw "Element already exists!!";
-		  	
+		  cout<< "Element already exists!!"<<endl;
+		  	return;
 		    } 
 		  
 		if(q==NULL)  // iterator has reached the leaf 
@@ -108,15 +108,20 @@ public:
 				}
 	 	
 	 	   iterator=q;   //iterator points to q
-	 	 }//end while
+    }//end while
 	 
    // we have inserted new node at its correct position
-		if(key<iterator->key)
-	   {iterator->LChild=temp;
-	   q=iterator->LChild;}
+	if(key<iterator->key)
+	   {
+	     iterator->LChild=temp;
+	     q=iterator->LChild;
+	   }
+	   
 	else if(key>iterator->key)
-	    {iterator->RChild=temp;
-	    q=iterator->RChild;}
+	    {
+		  iterator->RChild=temp;
+	      q=iterator->RChild;
+		}
 
 // now we will make a int variable a which will be -1 if insertion is done on right side of ImBal else it will be +1 if done  on left side of s
  int a;
@@ -205,10 +210,12 @@ public:
 					 {
 					 	ImBal->bf=-1;
 					 	ImBalChild->bf=0;
+					 	iterator->bf=0;
 					  } 
 					  else{
 					  	ImBal->bf=0;
 					  	ImBalChild->bf=1;
+					     iterator->bf=0;
 					  }
 					}//LR end
 		   	
@@ -228,10 +235,12 @@ public:
 					 {
 					 	ImBal->bf=0;
 					 	ImBalChild->bf=-1;
+					 	iterator->bf=0;
 					  } 
 					  else{
 					  	ImBal->bf=1;
 					  	ImBalChild->bf=0;
+					  	iterator->bf=0;
 					  }
 				   }//RL end
 				   
@@ -406,7 +415,8 @@ void AVL_Tree::AVL_Delete(int key){
                     ImBalChild->LChild = ImBal;
                     ImBalChild->bf = a;
                 }
-            }
+            
+			}
             //double rotation
             else if(ImBalChild->bf == a){
                 if(a == -1){
@@ -416,9 +426,7 @@ void AVL_Tree::AVL_Delete(int key){
                     ImBal->LChild = itrPoint->RChild;
                     itrPoint->RChild = ImBal;
                     
-				//	ImBal->bf = itrPoint->bf == 0 ? 0 : itrPoint->bf == 1 ? -1 : 0;
-                    //ImBalChild->bf = itrPoint->bf == 0 ? 0 : itrPoint->bf == 1 ? 0 : 1;
-                  //  itrPoint->bf = 0;
+			
                     
                     if(itrPoint->bf==0)
                     {
@@ -446,9 +454,6 @@ void AVL_Tree::AVL_Delete(int key){
                     itrPoint->RChild = ImBalChild;
                     ImBal->RChild = itrPoint->LChild;
                     itrPoint->LChild = ImBal;
-                   // ImBal->bf = itrPoint->bf == 0 ? 0 : itrPoint->bf == 1 ? 0 : 1;
-                    //ImBalChild->bf = itrPoint->bf == 0 ? 0 : itrPoint->bf == 1 ? -1 : 0;
-                    //itrPoint->bf = 0;
                      if(itrPoint->bf==0)
                     {
                         ImBal->bf=0;
@@ -470,10 +475,19 @@ void AVL_Tree::AVL_Delete(int key){
                   
                 }
             }
+            if(itrPoint->bf==1||itrPoint->bf==-1)
+            {
+            	if(ImBal==parImBal->RChild)
+            	  parImBal->RChild=itrPoint;
+            	  else parImBal->LChild=itrPoint;
+            	  return;
+			}
         }
         if(ImBal == parImBal->RChild) parImBal->RChild = itrPoint;
         else parImBal->LChild = itrPoint;       
-    }
+      
+	}
+    
 
   }
 
